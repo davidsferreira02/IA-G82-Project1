@@ -1,4 +1,4 @@
-from game_functions import draw_board, move, rules, settings
+from data.classes.Board import Board
 
 while(true):
 		print("1. Play the Game")
