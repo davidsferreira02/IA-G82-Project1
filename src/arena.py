@@ -73,6 +73,8 @@ class Arena:
                         self.player.move_up()
                     elif event.key == pygame.K_DOWN:
                         self.player.move_down()
+                    elif event.key==pygame.K_q:
+                         self.player.rotate_left()    
 
                 # Update level and blocks
                 if self.player.score > self.player.level:
@@ -121,6 +123,8 @@ class Arena:
             self.screen.blit(score_text, (10, 10))
             level_text = self.font.render(f"Level: {self.player.level}", True, self.WHITE)
             self.screen.blit(level_text, (10, 30))
+            cost_text = self.font.render(f"cost: {self.player.cost}", True, self.WHITE)
+            self.screen.blit(cost_text, (10, 50))
 
     # Update the display
             pygame.display.update()

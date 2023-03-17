@@ -1,6 +1,7 @@
 import pygame
 import sys
 from arena import Arena
+from instructions import Instructions
 
 # Initialize Pygame
 pygame.init()
@@ -21,6 +22,7 @@ quit_button=pygame.Rect(SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2 + 120, 150, 50)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 arena=Arena()
+instructions=Instructions()
 
 # Define the game loop
 while True:
@@ -34,6 +36,14 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if start_button.collidepoint(event.pos):
                 arena.run()
+
+            if instructions_button.collidepoint(event.pos):
+                instructions.run()
+            
+            if quit_button.collidepoint(event.pos):
+                pygame.quit()
+                sys.exit()   
+    
 
     # Draw the background
     screen.fill(WHITE)
