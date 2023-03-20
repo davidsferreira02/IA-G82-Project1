@@ -88,13 +88,17 @@ class Arena:
                 # Handle key presses
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
-                        self.player.move_left()
+                        if (self.player.x-1, self.player.y ) not in self.black_blocks:
+                          self.player.move_left()
                     elif event.key == pygame.K_RIGHT:
-                        self.player.move_right()
+                         if (self.player.x+1, self.player.y) not in self.black_blocks:
+                          self.player.move_right()
                     elif event.key == pygame.K_UP:
-                        self.player.move_up()
+                        if (self.player.x, self.player.y -1) not in self.black_blocks:
+                          self.player.move_up()
                     elif event.key == pygame.K_DOWN:
-                        self.player.move_down()
+                        if (self.player.x, self.player.y + 1) not in self.black_blocks:
+                          self.player.move_down()
                     
                     
 
