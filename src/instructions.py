@@ -24,7 +24,6 @@ class Instructions:
         # Initialize Pygame
         pygame.init()
         self.font = pygame.font.SysFont(None, 30)
-        self.player = Player("David", 0, 0)
         self.clock = pygame.time.Clock()
         # Create the screen
         self.screen = pygame.display.set_mode(
