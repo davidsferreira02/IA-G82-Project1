@@ -23,7 +23,7 @@ class Arena:
         # Initialize Pygame
         pygame.init()
 
-        random.seed(12)
+        random.seed(1730)
 
         # Create the screen
         self.screen = pygame.display.set_mode(
@@ -77,25 +77,45 @@ class Arena:
                     pygame.quit()
                     sys.exit()
 
-                if(self.player.x == self.golden_block_X and self.player.y == self.golden_block_Y): 
+                if(self.player.x == self.golden_block_X and self.player.y == self.golden_block_Y and self.player.state == 'UP'): 
                     self.player.update_score()   
 
                 # Handle key presses
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         if (self.player.x-1, self.player.y) not in self.black_blocks:
-                          self.player.move_left()
+                            if (self.player.state == 'DS'):
+                                self.player.move_left()
+                            elif ((self.player.state == 'DF') and (self.player.x-1, self.player.y+1) not in self.black_blocks):
+                                self.player.move_left() 
+                            elif ((self.player.state == 'UP') and (self.player.x-2, self.player.y) not in self.black_blocks):
+                                self.player.move_left()            
                     elif event.key == pygame.K_RIGHT:
-                         if (self.player.x+1, self.player.y) not in self.black_blocks:
-                          self.player.move_right()
+                        if (self.player.state == 'DS'):
+                            if (self.player.x+2, self.player.y) not in self.black_blocks:    
+                                self.player.move_right()
+                        elif (self.player.x+1, self.player.y) not in self.black_blocks:
+                            if ((self.player.state == 'DF') and (self.player.x+1, self.player.y+1) not in self.black_blocks):
+                                self.player.move_right()
+                            elif ((self.player.state == 'UP') and (self.player.x+2, self.player.y) not in self.black_blocks):
+                                self.player.move_right()
                     elif event.key == pygame.K_UP:
-                        if (self.player.x, self.player.y -1) not in self.black_blocks:
-                          self.player.move_up()
-                    elif event.key == pygame.K_DOWN:
-                        if (self.player.x, self.player.y + 1) not in self.black_blocks:
-                          self.player.move_down()
-                    
-                    
+                        if (self.player.x, self.player.y-1) not in self.black_blocks:
+                            if (self.player.state == 'DF'):
+                                self.player.move_up()
+                            elif ((self.player.state == 'DS') and (self.player.x+1, self.player.y-1) not in self.black_blocks):
+                                self.player.move_up()
+                            elif ((self.player.state == 'UP') and (self.player.x, self.player.y-2) not in self.black_blocks):
+                                self.player.move_up()
+                    elif event.key == pygame.K_DOWN:  
+                        if (self.player.state == 'DF'):
+                            if (self.player.x, self.player.y + 2) not in self.black_blocks:
+                                self.player.move_down()
+                        elif (self.player.x, self.player.y + 1) not in self.black_blocks:
+                            if ((self.player.state == 'DS') and (self.player.x+1, self.player.y+1) not in self.black_blocks):
+                                self.player.move_down()
+                            elif ((self.player.state == 'UP') and (self.player.x, self.player.y+2) not in self.black_blocks):
+                                self.player.move_down()   
 
                 # Update level and blocks
                 if self.player.score > self.player.level:
