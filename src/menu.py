@@ -67,8 +67,8 @@ while True:
 
     # Draw the start button
     pygame.draw.rect(screen, BLACK, start_button, 2)
-    pygame.draw.rect(screen,BLACK,instructions_button,2)
-    pygame.draw.rect(screen,BLACK,quit_button,2)
+    pygame.draw.rect(screen,BLACK, instructions_button, 2)
+    pygame.draw.rect(screen,BLACK, quit_button, 2)
 
     # Update the display
     pygame.display.update()

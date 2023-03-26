@@ -7,8 +7,8 @@ from player import Player
 class Instructions:
     ARENA_WIDTH = 20
     ARENA_HEIGHT = 15
-    BLOCK_WIDTH = 50
-    BLOCK_HEIGHT = 70
+    BLOCK_WIDTH = 45
+    BLOCK_HEIGHT = 60
     BLOCK_SIZE = 40
     SCREEN_WIDTH = 640
     SCREEN_HEIGHT = 480
@@ -24,7 +24,7 @@ class Instructions:
         # Initialize Pygame
         pygame.init()
         self.font = pygame.font.SysFont(None, 30)
-        self.player = Player("David", 0, 0)
+        self.player = Player("Player", 0, 0, 'UP')
         self.clock = pygame.time.Clock()
         # Create the screen
         self.screen = pygame.display.set_mode(
