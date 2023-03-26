@@ -1,67 +1,89 @@
-from typing import List, Tuple
 import heapq
 
+class Astar:
+     def __init__(self):
+         self.nodes = []
+         self.start = None
+         self.goal = None
+         self.grid_width =None
+         self.grid_height = None
+         self.obstacles = []
+         self.path = []
+
+     def find_path(self, start, goal, grid_width, grid_height, obstacles):
+         self.start = start
+         self.goal = goal
+         self.grid_width = grid_width
+         self.grid_height = grid_height
+         self.obstacles = obstacles
+
+         self.nodes = []
+         for y in range(0,self.grid_height):
+             for x in range(0,self.grid_width):
+                 self.nodes.append(Node(x, y, self))
+
+         self.start_node = self.get_node(self.start[0], self.start[1])
+         self.goal_node = self.get_node(self.goal[0], self.goal[1])
+
+         open_list = []
+         closed_list = set()
+
+         heapq.heappush(open_list, (0, self.start_node))
+         self.start_node.g = 0
+
+         while open_list:
+             current_node = heapq.heappop(open_list)[1]
+             closed_list.add(current_node)
+
+             if current_node == self.goal_node:
+                 self.path = []
+                 while current_node.parent:
+                     self.path.append((current_node.x, current_node.y))
+                     current_node = current_node.parent
+                 self.path.reverse()
+                 return self.path
+
+             for neighbor in self.get_neighbors(current_node):
+                 if neighbor in closed_list:
+                     continue
+                 tentative_g_score = current_node.g + 1
+                 if neighbor not in open_list:
+                     heapq.heappush(open_list, (tentative_g_score + neighbor.distance_to(self.goal_node), neighbor))
+                 elif tentative_g_score >= neighbor.g:
+                     continue
+
+                 neighbor.parent = current_node
+                 neighbor.g = tentative_g_score
+
+         return None
+
+     def get_node(self, x, y):
+        
+         return self.nodes[y * self.grid_width + x]
+
+     def get_neighbors(self, node):
+         neighbors = []
+         for x_offset, y_offset in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
+             x = node.x + x_offset
+             y = node.y + y_offset
+             if x < 0 or y < 0 or x >= self.grid_width or y >= self.grid_height:
+                 continue
+             neighbor = self.get_node(x, y)
+             if neighbor in self.obstacles:
+                 continue
+             neighbors.append(neighbor)
+         return neighbors
+
 class Node:
-    def __init__(self, position: Tuple[int, int], g: int, h: int, parent: 'Node' = None):
-        self.position = position
-        self.g = g
-        self.h = h
-        self.parent = parent
+     def __init__(self, x, y, graph):
+         self.x = x
+         self.y = y
+         self.graph = graph
+         self.parent = None
+         self.g = float('inf')
 
-    @property
-    def f(self) -> int:
-        return self.g + self.h
+     def distance_to(self, other):
+         return abs(self.x - other.x) + abs(self.y - other.y)
 
-class Arena:
-    def __init__(self, grid: List[List[int]]):
-        self.grid = grid
-        self.width = len(grid[0])
-        self.height = len(grid)
-    
-    def is_valid(self, position: Tuple[int, int]) -> bool:
-        x, y = position
-        if x < 0 or x >= self.width or y < 0 or y >= self.height:
-            return False
-        if self.grid[y][x] == 1:
-            return False
-        return True
-
-    def get_neighbors(self, position: Tuple[int, int]) -> List[Tuple[int, int]]:
-        x, y = position
-        neighbors = []
-        for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-            nx, ny = x + dx, y + dy
-            if self.is_valid((nx, ny)):
-                neighbors.append((nx, ny))
-        return neighbors
-
-def heuristic(a: Tuple[int, int], b: Tuple[int, int]) -> int:
-    return abs(a[0] - b[0]) + abs(a[1] - b[1])
-
-def astar(arena: Arena, start: Tuple[int, int], goal: Tuple[int, int]) -> int:
-    start_node = Node(start, 0, heuristic(start, goal))
-    open_list = [start_node]
-    closed_list = set()
-
-    while open_list:
-        current_node = heapq.heappop(open_list)
-        if current_node.position == goal:
-            path = []
-            while current_node:
-                path.append(current_node.position)
-                current_node = current_node.parent
-            return len(path) - 1  # Subtract 1 to remove the start node from the path
-        closed_list.add(current_node.position)
-        for neighbor_position in arena.get_neighbors(current_node.position):
-            if neighbor_position in closed_list:
-                continue
-            g = current_node.g + 1
-            h = heuristic(neighbor_position, goal)
-            neighbor_node = Node(neighbor_position, g, h, current_node)
-            if neighbor_node.f > g + h:  # This is a faster path to the neighbor
-                neighbor_node.g = g
-                neighbor_node.parent = current_node
-            if neighbor_node not in open_list:
-                heapq.heappush(open_list, neighbor_node)
-
-    return 0  # No path found
+     def __lt__(self, other):
+         return False
