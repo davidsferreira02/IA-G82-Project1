@@ -148,6 +148,14 @@ class Arena:
             player_rect = pygame.Rect(self.player.x * self.BLOCK_SIZE,
                               self.player.y * self.BLOCK_SIZE, self.BLOCK_SIZE, self.BLOCK_SIZE)
             pygame.draw.rect(self.screen, self.RED, player_rect)
+            if self.player.state == 'DS':
+                player_rect = pygame.Rect((self.player.x+1) * self.BLOCK_SIZE,
+                              self.player.y * self.BLOCK_SIZE, self.BLOCK_SIZE, self.BLOCK_SIZE)
+                pygame.draw.rect(self.screen, self.RED, player_rect)
+            elif self.player.state == 'DF':
+                player_rect = pygame.Rect(self.player.x * self.BLOCK_SIZE,
+                              (self.player.y+1) * self.BLOCK_SIZE, self.BLOCK_SIZE, self.BLOCK_SIZE)
+                pygame.draw.rect(self.screen, self.RED, player_rect)
 
             # Draw the score
             score_text = self.font.render(f"Score: {self.player.score}", True,self.WHITE)
