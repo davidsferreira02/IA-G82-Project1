@@ -7,7 +7,10 @@ BLOCK_HEIGHT = 70
 BLOCK_SIZE = 40
 
 
+
 class Player:
+
+
 
     
     
@@ -55,6 +58,14 @@ class Player:
     def update_level(self):
         self.level+=1
         self.reset_cost()
+
+    
+
+
+          
+            
+
+
      
 
  

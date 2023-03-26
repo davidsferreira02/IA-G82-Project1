@@ -3,6 +3,7 @@ import random
 import pygame
 import sys
 from player import Player
+from astar import Astar
 
 
 class Arena:
@@ -19,6 +20,10 @@ class Arena:
     RED = (255, 0, 0)
     GOLD = (255, 215, 0)
 
+  
+
+
+
     def __init__(self):
         # Initialize Pygame
         pygame.init()
@@ -29,6 +34,9 @@ class Arena:
 
         # Create the player
         self.player = Player("David", 0, 0)
+
+        
+
 
         # Set the clock
         self.clock = pygame.time.Clock()
@@ -49,16 +57,30 @@ class Arena:
         self.golden_block_X = self.golden_block[0]
         self.golden_block_Y = self.golden_block[1] 
 
-        self.score_level = 0             
+        self.score_level = 0     
+
+        self.astar=Astar() 
+              
 
     def run(self):
+        res=[]
+        res = res = self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH, self.ARENA_HEIGHT, self.black_blocks)
+
+        res1=len(res)
+       
         # Define the game loop
         while True:
+            
             # Handle events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
+
+                    
+
+                
 
                 if(self.player.x == self.golden_block_X and self.player.y == self.golden_block_Y): 
                     self.player.update_score()   
@@ -66,19 +88,24 @@ class Arena:
                 # Handle key presses
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
-                        self.player.move_left()
+                        if (self.player.x-1, self.player.y ) not in self.black_blocks:
+                          self.player.move_left()
                     elif event.key == pygame.K_RIGHT:
-                        self.player.move_right()
+                         if (self.player.x+1, self.player.y) not in self.black_blocks:
+                          self.player.move_right()
                     elif event.key == pygame.K_UP:
-                        self.player.move_up()
+                        if (self.player.x, self.player.y -1) not in self.black_blocks:
+                          self.player.move_up()
                     elif event.key == pygame.K_DOWN:
-                        self.player.move_down()
-                    elif event.key==pygame.K_q:
-                         self.player.rotate_left()    
+                        if (self.player.x, self.player.y + 1) not in self.black_blocks:
+                          self.player.move_down()
+                    
+                    
 
                 # Update level and blocks
                 if self.player.score > self.player.level:
                     self.player.update_level()
+                    
                     self.black_blocks = []
                     for i in range(random.randint(1, 30)):
                         x = random.randint(0, self.ARENA_WIDTH-1)
@@ -87,7 +114,9 @@ class Arena:
                         self.golden_block = (random.randint(0, self.ARENA_WIDTH-1),
                                             random.randint(0, self.ARENA_HEIGHT-1))
                         self.golden_block_X = self.golden_block[0]
-                        self.golden_block_Y = self.golden_block[1]  
+                        self.golden_block_Y = self.golden_block[1]
+                        res = res = self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH, self.ARENA_HEIGHT, self.black_blocks)
+                        res1=len(res)  
 
             # Draw the background
             self.screen.fill(self.GRAY)
@@ -125,6 +154,9 @@ class Arena:
             self.screen.blit(level_text, (10, 30))
             cost_text = self.font.render(f"cost: {self.player.cost}", True, self.WHITE)
             self.screen.blit(cost_text, (10, 50))
+            top_text = self.font.render(f"par: {res1}", True, self.WHITE)
+            self.screen.blit(top_text, (10, 70))
+          
 
     # Update the display
             pygame.display.update()
