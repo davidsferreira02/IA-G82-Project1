@@ -50,16 +50,6 @@ class Instructions:
             title_text = self.font.render(" How to play ", True, self.BLACK)
             self.screen.blit(title_text, (((self.SCREEN_WIDTH // 2 )+80) - title_text.get_width() // 2, 100))
 
-
-            
-
-
-
-
-
-
-   
-    
     # Update the display
             pygame.display.update()
 

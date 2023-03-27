@@ -1,8 +1,7 @@
 
 import pygame
 import sys
-from arena import Arena
-from player import Player
+from gameOptionsMenu import GameOptionsMenu 
 
 class SizeMenu:
     ARENA_WIDTH = 20
@@ -55,8 +54,8 @@ class SizeMenu:
                     if active:
                         if event.key == pygame.K_RETURN:
                             print(text)
-                            arena=Arena(int(text))
-                            arena.run()
+                            gameOptionsMenu=GameOptionsMenu(int(text))
+                            gameOptionsMenu.run()
                         elif event.key == pygame.K_BACKSPACE:
                             text = text[:-1]
                         else:
