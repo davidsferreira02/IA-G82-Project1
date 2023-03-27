@@ -19,11 +19,13 @@ class Arena:
     RED = (255, 0, 0)
     GOLD = (255, 215, 0)
 
-    def __init__(self):
+    def __init__(self, size):
         # Initialize Pygame
         pygame.init()
-
         random.seed(1730)
+        self.size = size
+        self.ARENA_WIDTH_BLOCKS = size
+        self.ARENA_HEIGHT_BLOCKS = size
 
         # Create the screen
         self.screen = pygame.display.set_mode(
