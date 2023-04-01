@@ -6,7 +6,7 @@ class Player:
         self.score=0
         self.x=0
         self.y=0
-        self.level=1 
+        self.level=0
         self.cost=0
         self.state='UP'
         self.size = size
@@ -61,7 +61,7 @@ class Player:
         elif (self.state == 'DF' and (self.y+1) < self.size-1):
             self.state = 'UP'
             self.y +=2
-        elif (self.state == 'DS' and (self.y+1) < self.size-1):
+        elif (self.state == 'DS' and (self.y+1) < self.size):
             self.y +=1
 
     def update_level(self):
