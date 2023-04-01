@@ -29,7 +29,7 @@ class SizeMenu:
     def run(self):
         self.font = pygame.font.SysFont(None, 30)
         self.clock = pygame.time.Clock()
-        input_box = pygame.Rect(200, 200, 140, 32)
+        input_box = pygame.Rect(370, 200, 140, 32)
         color_passive = pygame.Color('chartreuse4')
         color_active = pygame.Color('lightskyblue3')
         color = color_passive
@@ -53,7 +53,6 @@ class SizeMenu:
                 if event.type == pygame.KEYDOWN:
                     if active:
                         if event.key == pygame.K_RETURN:
-                            print(text)
                             gameOptionsMenu=GameOptionsMenu(int(text))
                             gameOptionsMenu.run()
                         elif event.key == pygame.K_BACKSPACE:
@@ -68,7 +67,7 @@ class SizeMenu:
             else:
                 color = color_passive
           
-            title_text = self.font.render(" Choose arena size (10-20)", True, self.BLACK)
+            title_text = self.font.render(" Write arena size (10-20) in rectangle", True, self.BLACK)
             self.screen.blit(title_text, (((self.SCREEN_WIDTH // 2 )+80) - title_text.get_width() // 2, 100))
 
             pygame.draw.rect(self.screen, color, input_box)
@@ -76,7 +75,7 @@ class SizeMenu:
             
             width = max(50, text_surface.get_width()+10)
             input_box.w = width
-            self.screen.blit(text_surface, (input_box.x+5, input_box.y+5))
+            self.screen.blit(text_surface, (input_box.x+10, input_box.y+5))
 
             pygame.display.flip()
             self.clock.tick(30)

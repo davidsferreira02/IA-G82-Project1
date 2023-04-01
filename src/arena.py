@@ -32,7 +32,7 @@ class Arena:
             (self.ARENA_WIDTH_BLOCKS * self.BLOCK_SIZE, self.ARENA_HEIGHT_BLOCKS * self.BLOCK_SIZE))
 
         # Create the player
-        self.player = Player("Player", 0, 0, 'UP')
+        self.player = Player("Player", 0, 0, 'UP', size)
 
         # Set the clock
         self.clock = pygame.time.Clock()
