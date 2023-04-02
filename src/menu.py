@@ -21,7 +21,7 @@ quit_button=pygame.Rect(SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2 + 120, 150, 50)
 # Create the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-arena=Arena()
+arena = Arena()
 instructions=Instructions()
 
 # Define the game loop

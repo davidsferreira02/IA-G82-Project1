@@ -10,7 +10,7 @@ class Astar:
         self.obstacles = []
         self.path = []
 
-    def find_path(self, start, goal, grid_width, grid_height, obstacles):
+    def find_path(self, start, goal, grid_width, grid_height, obstacles,cost):
         self.start = start
         self.goal = goal
         self.grid_width = grid_width
@@ -20,7 +20,7 @@ class Astar:
         self.nodes = []
         for y in range(0,self.grid_height):
             for x in range(0,self.grid_width):
-                self.nodes.append(Node(x, y, self))
+                self.nodes.append(Node(x, y, self,cost))
 
         self.start_node = self.get_node(self.start[0], self.start[1])
         self.goal_node = self.get_node(self.goal[0], self.goal[1])
@@ -28,14 +28,16 @@ class Astar:
         open_list = []
         closed_list = set()
 
-        heapq.heappush(open_list, (0, self.start_node))
+
+        #prioridade f(start_node) = g(start_node) + h(start_node)
+        heapq.heappush(open_list, (self.start_node.f(), self.start_node))
         self.start_node.g = 0
 
         while open_list:
             current_node = heapq.heappop(open_list)[1]
             closed_list.add(current_node)
 
-            if current_node == self.goal_node:
+            if self.is_goal_state(current_node):
                 self.path = []
                 while current_node.parent:
                     self.path.append((current_node.x, current_node.y))
@@ -46,8 +48,9 @@ class Astar:
             for neighbor in self.get_neighbors(current_node):
                 if neighbor in closed_list:
                     continue
-                tentative_g_score = current_node.g + 1
-                if neighbor not in open_list:
+                tentative_g_score = current_node.g + neighbor.get_cost(current_node)
+                if neighbor not in open_list: 
+                    #custo e heuristica da distancia adicionado ao vizinho com prioridade f(neighbor) = g(neighbor) + h(neighbor)
                     heapq.heappush(open_list, (tentative_g_score + neighbor.distance_to(self.goal_node), neighbor))
                 elif tentative_g_score >= neighbor.g:
                     continue
@@ -72,17 +75,36 @@ class Astar:
                 continue
             neighbors.append(neighbor)
         return neighbors
+    
+    def is_goal_state(self, node):
+        return node == self.goal_node
+    
+    #dist entre nos heuristica
+    def get_man_heuristic(self,node):
+        return abs(self.start_node.x - node.x) + abs(self.start_node.y - node.y)
 
 class Node:
-    def __init__(self, x, y, graph):
+    def __init__(self, x, y, graph,cost):
         self.x = x
         self.y = y
         self.graph = graph
         self.parent = None
         self.g = float('inf')
+        self.cost = cost
 
     def distance_to(self, other):
         return abs(self.x - other.x) + abs(self.y - other.y)
+    
+    def get_cost(self,other):
+        #custo de mov entre 2 nós
+        distance = self.distance_to(other)
+        return distance*self.cost #pode haver cenarios com custo > 1 para certos nos ent multiplicas se pela distancia
 
+    def f(self):
+        return self.g + self.graph.get_man_heuristic(self)
+
+    #f = g + h + cost", onde g é o custo do caminho até o nó atual, h é a heurística (que já existia na classe) e cost é o novo parâmetro adicionado.
     def __lt__(self, other):
-        return False
+        f1 = self.g + self.graph.get_man_heuristic(self.graph.goal_node) 
+        f2 = other.g + other.graph.get_man_heuristic(other.graph.goal_node) 
+        return f1 < f2
