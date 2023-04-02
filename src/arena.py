@@ -28,7 +28,7 @@ class Arena:
 
         # Create the screen
         self.screen = pygame.display.set_mode(
-            (self.ARENA_WIDTH_BLOCKS * self.BLOCK_SIZE, self.ARENA_HEIGHT_BLOCKS * self.BLOCK_SIZE))
+            (self.ARENA_WIDTH_BLOCKS_BLOCKS * self.BLOCK_SIZE, self.ARENA_HEIGHT_BLOCKS_BLOCKS * self.BLOCK_SIZE))
 
         # Create the player
         self.player = Player("Player", 0, 0, 'UP', size)
@@ -93,14 +93,8 @@ class Arena:
                             elif ((self.player.state == 'UP') and (self.player.x-2, self.player.y) not in self.black_blocks):
                                 self.player.move_left()            
                     elif event.key == pygame.K_RIGHT:
-                        if (self.player.state == 'DS'):
-                            if (self.player.x+2, self.player.y) not in self.black_blocks:    
-                                self.player.move_right()
-                        elif (self.player.x+1, self.player.y) not in self.black_blocks:
-                            if ((self.player.state == 'DF') and (self.player.x+1, self.player.y+1) not in self.black_blocks):
-                                self.player.move_right()
-                            elif ((self.player.state == 'UP') and (self.player.x+2, self.player.y) not in self.black_blocks):
-                                self.player.move_right()
+                         if (self.player.x+1, self.player.y) not in self.black_blocks:
+                          self.player.move_right()
                     elif event.key == pygame.K_UP:
                         if (self.player.x, self.player.y-1) not in self.black_blocks:
                             if (self.player.state == 'DF'):
@@ -137,7 +131,7 @@ class Arena:
                             self.golden_block = (random.randint(0, self.ARENA_WIDTH_BLOCKS-1), random.randint(0, self.ARENA_HEIGHT_BLOCKS-1))
                         self.golden_block_X = self.golden_block[0]
                         self.golden_block_Y = self.golden_block[1]
-                        res =self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS, self.black_blocks)
+                        res = res = self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH, self.ARENA_HEIGHT, self.black_blocks)
                         res1=len(res)  
 
             # Draw the background

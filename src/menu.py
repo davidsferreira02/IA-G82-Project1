@@ -1,6 +1,6 @@
 import pygame
 import sys
-from arena import Arena
+from sizeMenu import SizeMenu
 from instructions import Instructions
 
 # Initialize Pygame
@@ -21,7 +21,7 @@ quit_button=pygame.Rect(SCREEN_WIDTH // 2 , SCREEN_HEIGHT // 2 + 120, 150, 50)
 # Create the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-arena = Arena()
+sizeMenu=SizeMenu()
 instructions=Instructions()
 
 # Define the game loop
@@ -35,7 +35,7 @@ while True:
         # Handle key presses
         if event.type == pygame.MOUSEBUTTONDOWN:
             if start_button.collidepoint(event.pos):
-                arena.run()
+                sizeMenu.run()
 
             if instructions_button.collidepoint(event.pos):
                 instructions.run()
@@ -67,8 +67,8 @@ while True:
 
     # Draw the start button
     pygame.draw.rect(screen, BLACK, start_button, 2)
-    pygame.draw.rect(screen,BLACK,instructions_button,2)
-    pygame.draw.rect(screen,BLACK,quit_button,2)
+    pygame.draw.rect(screen,BLACK, instructions_button, 2)
+    pygame.draw.rect(screen,BLACK, quit_button, 2)
 
     # Update the display
     pygame.display.update()
