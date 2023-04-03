@@ -2,32 +2,34 @@ import pygame
 import sys
 from sizeMenu import SizeMenu
 from instructions import Instructions
-
+class Menu: 
 # Initialize Pygame
-pygame.init()
+
+
+ pygame.init()
 
 # Define colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-BLUE = (44, 119, 242)  # a blue color for the background
-GREEN = (148, 252, 96)  # a green color for the buttons
-SCREEN_WIDTH = 640
-SCREEN_HEIGHT = 480
+ BLACK = (0, 0, 0)
+ WHITE = (255, 255, 255)
+ BLUE = (44, 119, 242)  # a blue color for the background
+ GREEN = (148, 252, 96)  # a green color for the buttons
+ SCREEN_WIDTH = 640
+ SCREEN_HEIGHT = 480
 
 # Set the font
-font = pygame.font.Font("PressStart2P-Regular.ttf", 15)  # use a custom font
-start_button = pygame.Rect(SCREEN_WIDTH // 2 - 30, SCREEN_HEIGHT // 2 - 25, 200, 50)  # adjust the button positions
-instructions_button = pygame.Rect(SCREEN_WIDTH // 2 - 30, SCREEN_HEIGHT // 2 + 50, 200, 50)
-quit_button = pygame.Rect(SCREEN_WIDTH // 2 - 30, SCREEN_HEIGHT // 2 + 125, 200, 50)
+ font = pygame.font.Font("PressStart2P-Regular.ttf", 15)  # use a custom font
+ start_button = pygame.Rect(SCREEN_WIDTH // 2 - 30, SCREEN_HEIGHT // 2 - 25, 200, 50)  # adjust the button positions
+ instructions_button = pygame.Rect(SCREEN_WIDTH // 2 - 30, SCREEN_HEIGHT // 2 + 50, 200, 50)
+ quit_button = pygame.Rect(SCREEN_WIDTH // 2 - 30, SCREEN_HEIGHT // 2 + 125, 200, 50)
 
 # Create the screen
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-sizeMenu = SizeMenu()
-instructions = Instructions()
+ sizeMenu = SizeMenu()
+ instructions = Instructions()
 
 # Define the game loop
-while True:
+ while True:
     # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

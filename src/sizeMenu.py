@@ -4,6 +4,7 @@ import sys
 from gameOptionsMenu import GameOptionsMenu
 
 
+
 ARENA_WIDTH = 20
 ARENA_HEIGHT = 15
 BLOCK_WIDTH = 45
@@ -34,11 +35,13 @@ class SizeMenu:
         self.font = pygame.font.Font("PressStart2P-Regular.ttf", 15)
         self.clock = pygame.time.Clock()
         input_box = pygame.Rect(250, 200, 140, 32)
+        retro_button=pygame.draw.polygon(self.screen, WHITE, [(30, 20), (10, 30), (30, 40)])
         color_passive = pygame.Color(BLACK)
         color_active = pygame.Color(GRAY)
         color = color_passive
         active = False
         text = ''
+      
 
         # Define the game loop
         while True:
@@ -51,6 +54,10 @@ class SizeMenu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if input_box.collidepoint(event.pos):
                         active = not active
+                   
+                        
+                        
+
                     else:
                         active = False
                     color = color_active if active else color_passive
@@ -80,7 +87,8 @@ class SizeMenu:
             width = max(300, text_surface.get_width()+10)
             input_box.w = width
             self.screen.blit(text_surface, (input_box.x+10, input_box.y+5))
+           
 
             pygame.display.flip()
             self.clock.tick(30)
-
+    

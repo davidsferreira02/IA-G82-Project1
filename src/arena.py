@@ -4,6 +4,7 @@ import pygame
 import sys
 from player import Player
 from astar import Astar
+from gameOver import GameOver
 
 class Arena:
     ARENA_WIDTH_BLOCKS = 10
@@ -63,6 +64,8 @@ class Arena:
         self.score_level = 0     
 
         self.astar=Astar() 
+
+        self.gameOver=GameOver(self.screen,self.player,self.size)
               
 
     def run(self):
@@ -91,8 +94,15 @@ class Arena:
                                 self.player.move_left()
                             elif ((self.player.state == 'DF') and (self.player.x-1, self.player.y+1) not in self.black_blocks):
                                 self.player.move_left() 
+                                
                             elif ((self.player.state == 'UP') and (self.player.x-2, self.player.y) not in self.black_blocks):
-                                self.player.move_left()            
+                                self.player.move_left()
+                            else:
+                             self.gameOver.run()    
+
+                        else:
+                            self.gameOver.run()
+                                              
                     elif event.key == pygame.K_RIGHT:
                         if (self.player.state == 'DS'):
                             if (self.player.x+2, self.player.y) not in self.black_blocks:    
@@ -102,6 +112,13 @@ class Arena:
                                 self.player.move_right()
                             elif ((self.player.state == 'UP') and (self.player.x+2, self.player.y) not in self.black_blocks):
                                 self.player.move_right()
+
+                        
+                            else:
+                             self.gameOver.run()
+
+                        else:self.gameOver.run()     
+                                                      
                     elif event.key == pygame.K_UP:
                         if (self.player.x, self.player.y-1) not in self.black_blocks:
                             if (self.player.state == 'DF'):
@@ -110,15 +127,32 @@ class Arena:
                                 self.player.move_up()
                             elif ((self.player.state == 'UP') and (self.player.x, self.player.y-2) not in self.black_blocks):
                                 self.player.move_up()
+                            else:
+                                self.gameOver.run()    
+
+
+                        
+                        else:
+                            self.gameOver.run()
+                                                      
                     elif event.key == pygame.K_DOWN:  
                         if (self.player.state == 'DF'):
                             if (self.player.x, self.player.y + 2) not in self.black_blocks:
                                 self.player.move_down()
+                            else:
+                                self.gameOver.run()    
                         elif (self.player.x, self.player.y + 1) not in self.black_blocks:
                             if ((self.player.state == 'DS') and (self.player.x+1, self.player.y+1) not in self.black_blocks):
                                 self.player.move_down()
                             elif ((self.player.state == 'UP') and (self.player.x, self.player.y+2) not in self.black_blocks):
-                                self.player.move_down()   
+                                self.player.move_down() 
+                            else:
+                                self.gameOver.run()     
+
+                        
+                        else:
+                            self.gameOver.run()
+                                                       
 
                 # Update level and blocks
                 if self.player.score > self.player.level:
