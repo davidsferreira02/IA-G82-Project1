@@ -2,7 +2,7 @@ import random
 import pygame
 import sys
 from player import Player
-from astar import Astar
+from astar import astar
 
 class Arena:
     ARENA_WIDTH_BLOCKS = 10
@@ -18,17 +18,18 @@ class Arena:
     RED = (255, 0, 0)
     GOLD = (255, 215, 0)
 
-    def __init__(self, size):
+    def __init__(self, size, game_mode):
         # Initialize Pygame
         pygame.init()
         random.seed(1730)
         self.size = size
         self.ARENA_WIDTH_BLOCKS = size
         self.ARENA_HEIGHT_BLOCKS = size
+        self.game_mode = game_mode
 
         # Create the screen
         self.screen = pygame.display.set_mode(
-            (self.ARENA_WIDTH_BLOCKS_BLOCKS * self.BLOCK_SIZE, self.ARENA_HEIGHT_BLOCKS_BLOCKS * self.BLOCK_SIZE))
+            (self.ARENA_WIDTH_BLOCKS * self.BLOCK_SIZE, self.ARENA_HEIGHT_BLOCKS * self.BLOCK_SIZE))
 
         # Create the player
         self.player = Player("Player", 0, 0, 'UP', size)
@@ -42,7 +43,7 @@ class Arena:
         
         self.score_level = 0     
 
-        self.astar=Astar() 
+        #self.astar=Astar() #TODO: fix
         # Create initial blocks
         self.black_blocks = []
         for i in range(random.randint(1, 30)):
@@ -62,14 +63,15 @@ class Arena:
         self.golden_block_X = self.golden_block[0]
         self.golden_block_Y = self.golden_block[1] 
 
+        #res = self.astar.find_path((self.player.x, self.player.y), (self.golden_block_X,self.golden_block_Y), self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS, self.black_blocks,1)
+                    #res1=len(res) TODO: fix
+        #print("caminho:",res)
+
+
               
 
     def run(self):
-        res=[]
-        res = self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS, self.black_blocks)
-
-        res1=len(res)
-       
+    
         # Define the game loop
         while True:
             
@@ -82,37 +84,46 @@ class Arena:
                 if(self.player.x == self.golden_block_X and self.player.y == self.golden_block_Y and self.player.state == 'UP'): 
                     self.player.update_score()   
 
-                # Handle key presses
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        if (self.player.x-1, self.player.y) not in self.black_blocks:
-                            if (self.player.state == 'DS'):
-                                self.player.move_left()
-                            elif ((self.player.state == 'DF') and (self.player.x-1, self.player.y+1) not in self.black_blocks):
-                                self.player.move_left() 
-                            elif ((self.player.state == 'UP') and (self.player.x-2, self.player.y) not in self.black_blocks):
-                                self.player.move_left()            
-                    elif event.key == pygame.K_RIGHT:
-                         if (self.player.x+1, self.player.y) not in self.black_blocks:
-                          self.player.move_right()
-                    elif event.key == pygame.K_UP:
-                        if (self.player.x, self.player.y-1) not in self.black_blocks:
+                if(self.game_mode == 0):
+                    # Handle key presses
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_LEFT:
+                            if (self.player.x-1, self.player.y) not in self.black_blocks:
+                                if (self.player.state == 'DS'):
+                                    self.player.move_left()
+                                elif ((self.player.state == 'DF') and (self.player.x-1, self.player.y+1) not in self.black_blocks):
+                                    self.player.move_left() 
+                                elif ((self.player.state == 'UP') and (self.player.x-2, self.player.y) not in self.black_blocks):
+                                    self.player.move_left()            
+                        elif event.key == pygame.K_RIGHT:
+                            if (self.player.x+1, self.player.y) not in self.black_blocks:
+                                self.player.move_right()
+                        elif event.key == pygame.K_UP:
+                            if (self.player.x, self.player.y-1) not in self.black_blocks:
+                                if (self.player.state == 'DF'):
+                                    self.player.move_up()
+                                elif ((self.player.state == 'DS') and (self.player.x+1, self.player.y-1) not in self.black_blocks):
+                                    self.player.move_up()
+                                elif ((self.player.state == 'UP') and (self.player.x, self.player.y-2) not in self.black_blocks):
+                                    self.player.move_up()
+                        elif event.key == pygame.K_DOWN:  
                             if (self.player.state == 'DF'):
-                                self.player.move_up()
-                            elif ((self.player.state == 'DS') and (self.player.x+1, self.player.y-1) not in self.black_blocks):
-                                self.player.move_up()
-                            elif ((self.player.state == 'UP') and (self.player.x, self.player.y-2) not in self.black_blocks):
-                                self.player.move_up()
-                    elif event.key == pygame.K_DOWN:  
-                        if (self.player.state == 'DF'):
-                            if (self.player.x, self.player.y + 2) not in self.black_blocks:
-                                self.player.move_down()
-                        elif (self.player.x, self.player.y + 1) not in self.black_blocks:
-                            if ((self.player.state == 'DS') and (self.player.x+1, self.player.y+1) not in self.black_blocks):
-                                self.player.move_down()
-                            elif ((self.player.state == 'UP') and (self.player.x, self.player.y+2) not in self.black_blocks):
-                                self.player.move_down()   
-
+                                if (self.player.x, self.player.y + 2) not in self.black_blocks:
+                                    self.player.move_down()
+                            elif (self.player.x, self.player.y + 1) not in self.black_blocks:
+                                if ((self.player.state == 'DS') and (self.player.x+1, self.player.y+1) not in self.black_blocks):
+                                    self.player.move_down()
+                                elif ((self.player.state == 'UP') and (self.player.x, self.player.y+2) not in self.black_blocks):
+                                    self.player.move_down()   
+                elif (self.game_mode == 1):
+                    res=[]
+                    res = astar((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS, self.black_blocks)
+                
+                elif (self.game_mode == 2):
+                    res=[]
+                    res = self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.black_blocks, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS)
+                    print("caminho ", res)
+                    res1=len(res)
                 # Update level and blocks
                 if self.player.score > self.player.level:
                     self.player.update_level()
@@ -124,15 +135,16 @@ class Arena:
                         while ((x,y) in self.black_blocks or (x,y) == (self.player.x, self.player.y)):
                             x = random.randint(0, self.ARENA_WIDTH_BLOCKS-1)
                             y = random.randint(0, self.ARENA_HEIGHT_BLOCKS-1)
+
                         self.black_blocks.append((x, y))
                         self.golden_block = (random.randint(0, self.ARENA_WIDTH_BLOCKS-1),
                                             random.randint(0, self.ARENA_HEIGHT_BLOCKS-1))
+                        
                         while (self.golden_block in self.black_blocks or self.golden_block == (self.player.x, self.player.y)) :
                             self.golden_block = (random.randint(0, self.ARENA_WIDTH_BLOCKS-1), random.randint(0, self.ARENA_HEIGHT_BLOCKS-1))
                         self.golden_block_X = self.golden_block[0]
                         self.golden_block_Y = self.golden_block[1]
-                        res = res = self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH, self.ARENA_HEIGHT, self.black_blocks)
-                        res1=len(res)  
+                    
 
             # Draw the background
             self.screen.fill(self.GRAY)
@@ -180,8 +192,8 @@ class Arena:
             self.screen.blit(level_text, (10, 30))
             cost_text = self.font.render(f"cost: {self.player.cost}", True, self.WHITE)
             self.screen.blit(cost_text, (10, 50))
-            top_text = self.font.render(f"par: {res1}", True, self.WHITE)
-            self.screen.blit(top_text, (10, 70))
+            #top_text = self.font.render(f"par: {res1}", True, self.WHITE)
+            #self.screen.blit(top_text, (10, 70))
           
 
             # Update the display
