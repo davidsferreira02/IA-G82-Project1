@@ -3,6 +3,7 @@ import pygame
 import sys
 from arena import Arena
 
+
 class GameOptionsMenu:
     ARENA_WIDTH = 20
     ARENA_HEIGHT = 15
@@ -83,6 +84,9 @@ class GameOptionsMenu:
                  pygame.draw.rect(self.screen, (255, 255, 255),computer_bfs_button, 2)
             if computer_astar_button.collidepoint(pygame.mouse.get_pos()):
                  pygame.draw.rect(self.screen, (255, 255, 255), computer_astar_button, 2)
+
+            
+
             
 
             # Update the display

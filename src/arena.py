@@ -9,33 +9,6 @@ from bfs import BFS
 
 
 
-class Node:
-    def __init__(self, x, y, cost):
-        self.x = x
-        self.y = y
-        self.g = float('inf')
-        self.cost = cost
-
-    def distance_to(self, other):
-        return abs(self.x - other.x) + abs(self.y - other.y)
-     #dist entre nos heuristica
-
-    def get_man_heuristic(self,goal_node):
-        return abs(self.x - goal_node.x) + abs(self.y - goal_node.y)
-    
-    def get_cost(self,other):
-        #custo de mov entre 2 nós
-        distance = self.distance_to(other)
-        return distance*self.cost #pode haver cenarios com custo > 1 para certos nos ent multiplicas se pela distancia
-
-    def f(self,goal_node):
-        return self.g + self.get_man_heuristic(goal_node)
-
-    #f = g + h + cost", onde g é o custo do caminho até o nó atual, h é a heurística (que já existia na classe) e cost é o novo parâmetro adicionado.
-    def __lt__(self, other):
-        f1 = self.g + self.get_man_heuristic(self.goal_node) 
-        f2 = other.g + other.get_man_heuristic(other.goal_node) 
-        return f1 < f2
 
 class Arena:
     ARENA_WIDTH_BLOCKS = 10

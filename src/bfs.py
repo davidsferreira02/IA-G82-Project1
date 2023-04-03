@@ -1,20 +1,41 @@
 from collections import deque
 
-class BFS:
-    def __init__(self, graph):
-        self.graph = graph
+class Vertex:
+    def __init__(self, id):
+        self.id = id
+        self.adj = []
+        self.visited = False
 
-    def bfs(self, start, goal):
-        visited = set()
-        queue = deque([(start, [])])
+class IntroGraph:
+    def __init__(self):
+        self.vertexSet = []
 
-        while queue:
-            vertex, path = queue.popleft()
-            if vertex == goal:
-                return path + [vertex]
-            if vertex not in visited:
-                visited.add(vertex)
-                for neighbor in self.graph[vertex]:
-                    queue.append((neighbor, path + [vertex]))
-
+    def findVertex(self, id):
+        for v in self.vertexSet:
+            if v.id == id:
+                return v
         return None
+
+    def bfs(self, source):
+        res = []
+        s = self.findVertex(source)
+        if not s:
+            return res
+
+        for v in self.vertexSet:
+            v.visited = False
+
+        q = deque()
+        q.append(s)
+        s.visited = True
+
+        while q:
+            v = q.popleft()
+            res.append(v.id)
+            for e in v.adj:
+                w = e.dest
+                if not w.visited:
+                    q.append(w)
+                    w.visited = True
+
+        return res
