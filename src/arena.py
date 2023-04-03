@@ -18,6 +18,7 @@ class Arena:
     WHITE = (255, 255, 255)
     RED = (255, 0, 0)
     GOLD = (255, 215, 0)
+    BLUE = (44, 119, 242)
 
     def __init__(self, size):
         # Initialize Pygame
@@ -141,7 +142,7 @@ class Arena:
                         res1=len(res)  
 
             # Draw the background
-            self.screen.fill(self.GRAY)
+            self.screen.fill(self.BLUE)
 
             for block in self.black_blocks:
                block_rect = pygame.Rect(
