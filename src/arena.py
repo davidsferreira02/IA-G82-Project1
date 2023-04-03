@@ -5,6 +5,37 @@ import sys
 from player import Player
 from astar import Astar
 from gameOver import GameOver
+from bfs import BFS
+
+
+
+class Node:
+    def __init__(self, x, y, cost):
+        self.x = x
+        self.y = y
+        self.g = float('inf')
+        self.cost = cost
+
+    def distance_to(self, other):
+        return abs(self.x - other.x) + abs(self.y - other.y)
+     #dist entre nos heuristica
+
+    def get_man_heuristic(self,goal_node):
+        return abs(self.x - goal_node.x) + abs(self.y - goal_node.y)
+    
+    def get_cost(self,other):
+        #custo de mov entre 2 nós
+        distance = self.distance_to(other)
+        return distance*self.cost #pode haver cenarios com custo > 1 para certos nos ent multiplicas se pela distancia
+
+    def f(self,goal_node):
+        return self.g + self.get_man_heuristic(goal_node)
+
+    #f = g + h + cost", onde g é o custo do caminho até o nó atual, h é a heurística (que já existia na classe) e cost é o novo parâmetro adicionado.
+    def __lt__(self, other):
+        f1 = self.g + self.get_man_heuristic(self.goal_node) 
+        f2 = other.g + other.get_man_heuristic(other.goal_node) 
+        return f1 < f2
 
 class Arena:
     ARENA_WIDTH_BLOCKS = 10
@@ -79,12 +110,16 @@ class Arena:
             
             # Handle events
             for event in pygame.event.get():
+               
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
                 if(self.player.x == self.golden_block_X and self.player.y == self.golden_block_Y and self.player.state == 'UP'): 
-                    self.player.update_score()   
+                    self.player.update_score()  
+
+                neighbors=set()
+                node=Node(self.player.x,self.player.y,1)     
 
                 # Handle key presses
                 if event.type == pygame.KEYDOWN:
@@ -92,11 +127,16 @@ class Arena:
                         if (self.player.x-1, self.player.y) not in self.black_blocks:
                             if (self.player.state == 'DS'):
                                 self.player.move_left()
+                                neighbors.add((self.player.x-1,self.player.y))
+                                
+                                
                             elif ((self.player.state == 'DF') and (self.player.x-1, self.player.y+1) not in self.black_blocks):
                                 self.player.move_left() 
+                                neighbors.add((self.player.x-1,self.player.y+1))
                                 
                             elif ((self.player.state == 'UP') and (self.player.x-2, self.player.y) not in self.black_blocks):
                                 self.player.move_left()
+                                neighbors.add((self.player.x-2,self.player.y))
                             else:
                              self.gameOver.run()    
 
@@ -107,11 +147,14 @@ class Arena:
                         if (self.player.state == 'DS'):
                             if (self.player.x+2, self.player.y) not in self.black_blocks:    
                                 self.player.move_right()
+                                neighbors.add((self.player.x-2,self.player.y))
                         elif (self.player.x+1, self.player.y) not in self.black_blocks:
                             if ((self.player.state == 'DF') and (self.player.x+1, self.player.y+1) not in self.black_blocks):
                                 self.player.move_right()
+                                neighbors.add((self.player.x+1,self.player.y+1))
                             elif ((self.player.state == 'UP') and (self.player.x+2, self.player.y) not in self.black_blocks):
                                 self.player.move_right()
+                                neighbors.add((self.player.x+2,self.player.y))
 
                         
                             else:
@@ -123,10 +166,13 @@ class Arena:
                         if (self.player.x, self.player.y-1) not in self.black_blocks:
                             if (self.player.state == 'DF'):
                                 self.player.move_up()
+                                neighbors.add((self.player.x,self.player.y-1))
                             elif ((self.player.state == 'DS') and (self.player.x+1, self.player.y-1) not in self.black_blocks):
                                 self.player.move_up()
+                                neighbors.add((self.player.x+1,self.player.y-1))
                             elif ((self.player.state == 'UP') and (self.player.x, self.player.y-2) not in self.black_blocks):
                                 self.player.move_up()
+                                neighbors.add((self.player.x,self.player.y-2))
                             else:
                                 self.gameOver.run()    
 
@@ -139,20 +185,33 @@ class Arena:
                         if (self.player.state == 'DF'):
                             if (self.player.x, self.player.y + 2) not in self.black_blocks:
                                 self.player.move_down()
+                                neighbors.add((self.player.x,self.player.y+2))
                             else:
                                 self.gameOver.run()    
                         elif (self.player.x, self.player.y + 1) not in self.black_blocks:
                             if ((self.player.state == 'DS') and (self.player.x+1, self.player.y+1) not in self.black_blocks):
                                 self.player.move_down()
+                                neighbors.add((self.player.x+1,self.player.y+1))
                             elif ((self.player.state == 'UP') and (self.player.x, self.player.y+2) not in self.black_blocks):
                                 self.player.move_down() 
+                                neighbors.add((self.player.x,self.player.y+2))
                             else:
                                 self.gameOver.run()     
 
                         
                         else:
                             self.gameOver.run()
-                                                       
+
+
+                  
+
+                    
+                start_node = (self.player.x,self.player.y)
+                goal_node = (self.golden_block_X, self.golden_block_Y)
+                path = BFS(start_node, goal_node,neighbors)
+
+                    
+                                                           
 
                 # Update level and blocks
                 if self.player.score > self.player.level:
@@ -221,7 +280,7 @@ class Arena:
             self.screen.blit(level_text, (10, 30))
             cost_text = self.font.render(f"cost: {self.player.cost}", True, self.WHITE)
             self.screen.blit(cost_text, (10, 50))
-            top_text = self.font.render(f"par: {res1}", True, self.WHITE)
+            top_text = self.font.render(f"par: {path}", True, self.WHITE)
             self.screen.blit(top_text, (10, 70))
           
 
@@ -230,3 +289,6 @@ class Arena:
 
             # Set the frame rate
             self.clock.tick(10)
+
+
+
