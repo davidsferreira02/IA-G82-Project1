@@ -5,7 +5,7 @@ import sys
 from player import Player
 from astar import Astar
 from gameOver import GameOver
-from bfs import get_path
+from bfs import bfs
 
 
 
@@ -176,7 +176,7 @@ class Arena:
 
              
         
-                path = get_path((self.player.x, self.player.y), (self.golden_block_X,self.golden_block_Y), self.black_blocks, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS)
+                path=bfs(0,(self.golden_rect_X,self.golden_rect_Y)) #duvida luisa o que meto no primeiro argumento
 
                     
                                                            
