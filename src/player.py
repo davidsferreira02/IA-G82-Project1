@@ -17,9 +17,6 @@ class Player:
     def update_cost(self):
         self.cost+=1
 
-    def reset_cost(self):
-        self.cost=0       
-
     def move_up(self):
         self.update_cost()
         if (self.state == 'UP' and self.y-1>0):
@@ -66,7 +63,7 @@ class Player:
 
     def update_level(self):
         self.level+=1
-        self.reset_cost()
+        self.cost = 0
 
     
 

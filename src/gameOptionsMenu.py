@@ -2,6 +2,7 @@ import pygame
 import sys
 from arena import Arena
 
+
 class GameOptionsMenu:
     ARENA_WIDTH = 20
     ARENA_HEIGHT = 15
@@ -46,12 +47,12 @@ class GameOptionsMenu:
                 # Handle key presses
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if human_mode_button.collidepoint(event.pos):
-                        arena=Arena(self.size,0) #modo de jogo normal
+                        arena=Arena(self.size,0,1730) #modo de jogo normal
                         arena.run()
                     if computer_bfs_button.collidepoint(event.pos): #TODO
-                        arena = Arena(self.size,1) #bfs
+                        arena = Arena(self.size,1,1730) #bfs
                     if computer_astar_button.collidepoint(event.pos): 
-                        arena = Arena(self.size,2) #astar
+                        arena = Arena(self.size,2,1730) #astar
                         arena.run()
 
 

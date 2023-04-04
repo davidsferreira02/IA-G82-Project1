@@ -1,87 +1,5 @@
 import heapq
-
-# class Astar:
-#     def __init__(self):
-#         self.nodes = []
-#         self.start = None
-#         self.goal = None
-#         self.grid_width =None
-#         self.grid_height = None
-#         self.obstacles = []
-#         self.path = []
-
-#     def find_path(self, start, goal, grid_width, grid_height, obstacles, cost):
-#         self.start = start
-#         self.goal = goal
-#         self.grid_width = grid_width
-#         self.grid_height = grid_height
-#         self.obstacles = obstacles
-
-#         self.nodes = []
-#         for y in range(0,self.grid_height):
-#             for x in range(0,self.grid_width):
-#                 self.nodes.append(Node(x, y, cost))
-
-#         self.start_node = self.get_node(self.start[0], self.start[1])
-#         self.goal_node = self.get_node(self.goal[0], self.goal[1])
-
-#         open_list = []
-#         closed_list = set()
-
-    
-#         #prioridade f(start_node) = g(start_node) + h(start_node)
-#         heapq.heappush(open_list, (self.start_node.f(self.goal_node), self.start_node))
-
-#         self.start_node.g = 0
-
-#         while open_list:
-#             current_node = heapq.heappop(open_list)[1]
-#             closed_list.add(current_node)
-
-#             if self.is_goal_state(current_node):
-#                 self.path = []
-#                 while current_node.parent:
-#                     self.path.append((current_node.x, current_node.y))
-#                     current_node = current_node.parent
-#                 self.path.reverse()
-#                 return self.path
-
-#             for neighbor in self.get_neighbors(current_node):
-#                 if neighbor in closed_list:
-#                     continue
-#                 tentative_g_score = current_node.g + neighbor.get_cost(current_node)
-#                 if neighbor not in open_list: 
-#                     #custo e heuristica da distancia adicionado ao vizinho com prioridade f(neighbor) = g(neighbor) + h(neighbor)
-#                     heapq.heappush(open_list, (tentative_g_score + neighbor.get_man_heuristic(neighbor), neighbor))
-#                 elif tentative_g_score >= neighbor.g:
-#                     continue
-
-#                 neighbor.parent = current_node
-#                 neighbor.g = tentative_g_score
-
-#         return None
-
-#     def get_node(self, x, y):
-#         return self.nodes[y * self.grid_width + x]
-
-#     def get_neighbors(self, node):
-#         neighbors = []
-#         for x_offset, y_offset in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
-#             x = node.x + x_offset
-#             y = node.y + y_offset
-#             if x < 0 or y < 0 or x >= self.grid_width or y >= self.grid_height:
-#                 continue
-#             neighbor = self.get_node(x, y)
-#             if neighbor in self.obstacles:
-#                 continue
-#             neighbors.append(neighbor)
-#         return neighbors
-    
-#     def is_goal_state(self, node):
-#         return node == self.goal_node
-    
-   
-
+"""
 class Node:
     def __init__(self, x, y, cost):
         self.x = x
@@ -109,11 +27,11 @@ class Node:
         f1 = self.g + self.get_man_heuristic(self.goal_node) 
         f2 = other.g + other.get_man_heuristic(other.goal_node) 
         return f1 < f2
-
+"""
     
 class AstarNode:
     def __init__(self, pos: tuple, direction: int, f: int = 0, parent = None):
-        self.pos = pos
+        
         """
         0 -> up (deitado)
         1 -> right
@@ -121,6 +39,7 @@ class AstarNode:
         3 -> left 
         4 -> standing
         """
+        self.pos = pos
         self.direction = direction
         self.h = 0
         self.g = 0
@@ -270,13 +189,21 @@ def astar(player_node: tuple, goal_node: tuple, obstacles: list, width: int, hei
         
         closed_list.append(minor_f)
 
-
+"""
 if __name__ == "__main__":
-    res: AstarNode = astar((0, 0), (5, 5), [(2, 2), (2, 3), (2, 4)], 6, 6)
-    succ: AstarNode= res
+    AstarNode = astar((0, 0), (5, 5), [(1, 1), (2, 3), (2, 4)], 6, 6)"""
+def get_path(start, goal, obstacles, width, height):
+    AstarNode = astar(start, goal, obstacles, width, height)  
+    succ = AstarNode
+    path = []
+
     while succ != None:
-        print(succ.pos)
+        path.append(succ.pos)
         succ = succ.parent
+
+    path.reverse()
+
+    return path
 
 """
 1.  Initialize the open list
