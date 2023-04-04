@@ -1,41 +1,44 @@
 from collections import deque
+from player import Player
+from arena import Arena, WALL
 
-class Vertex:
-    def __init__(self, id):
-        self.id = id
-        self.adj = []
-        self.visited = False
+def bfs(player, golden_block, black_blcok):
+    # Cria um objeto Arena e um objeto Player
+    
+   
 
-class IntroGraph:
-    def __init__(self):
-        self.vertexSet = []
+    # Define a posição de destino
+ 
+    # Cria uma fila para armazenar os próximos nós a serem explorados
+    queue = deque([((player.x,player.y), 0)])
 
-    def findVertex(self, id):
-        for v in self.vertexSet:
-            if v.id == id:
-                return v
-        return None
+    # Cria um conjunto para armazenar as posições visitadas
+    visited = set(([player.x,player.y]))
 
-    def bfs(self, source):
-        res = []
-        s = self.findVertex(source)
-        if not s:
-            return res
+    while queue:
+        # Pega o próximo nó da fila
+        current_pos_X,current_pos_Y, distance = queue.popleft()
 
-        for v in self.vertexSet:
-            v.visited = False
+        # Verifica se chegou ao destino
+        if current_pos_X == golden_block[0] and current_pos_Y==golden_block[1]:
+            return distance
 
-        q = deque()
-        q.append(s)
-        s.visited = True
+        # Expande os nós adjacentes
+        
+        if(player.state=="UP"):
+         for r, c in [(current_pos_X-1,current_pos_Y), (current_pos_X, current_pos_Y+1), (current_pos_X+1, current_pos_Y), (current_pos_X, current_pos_Y-1)]:
+            # Verifica se a posição é válida
+            if arena.is_valid_pos(r, c) and (r, c) not in visited:
+                # Verifica se a posição é uma parede
+                if arena.get_pos_content(r, c) == WALL:
+                    continue
 
-        while q:
-            v = q.popleft()
-            res.append(v.id)
-            for e in v.adj:
-                w = e.dest
-                if not w.visited:
-                    q.append(w)
-                    w.visited = True
+                # Marca a posição como visitada
+                visited.add((r, c))
 
-        return res
+                # Adiciona a posição à fila
+                queue.append(((r, c), distance+1))
+
+    # Se não foi possível chegar ao destino, retorna -1
+    return -1
+

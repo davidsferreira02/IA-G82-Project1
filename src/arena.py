@@ -38,7 +38,7 @@ class Arena:
             (self.ARENA_WIDTH_BLOCKS * self.BLOCK_SIZE, self.ARENA_HEIGHT_BLOCKS * self.BLOCK_SIZE))
 
         # Create the player
-        self.player = Player("Player", 0, 0, 'UP', size)
+        self.player = Player(0, 0, 'UP', size)
 
         # Set the clock
         self.clock = pygame.time.Clock()
@@ -92,7 +92,7 @@ class Arena:
                     self.player.update_score()  
 
                 neighbors=set()
-                node=Node(self.player.x,self.player.y,1)     
+               
 
                 # Handle key presses
                 if event.type == pygame.KEYDOWN:

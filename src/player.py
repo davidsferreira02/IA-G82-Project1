@@ -2,13 +2,13 @@ BLOCK_SIZE = 40
 
 class Player:
 
-    def __init__(self, name, x, y, state, size):
+    def __init__(self, x, y, state, size):
         self.score=0
-        self.x=0
-        self.y=0
+        self.x=x
+        self.y=y
         self.level=0
         self.cost=0
-        self.state='UP'
+        self.state=state
         self.size = size
 
     def update_score(self):
@@ -98,11 +98,4 @@ class Player:
     
     
        
-
-
-
-
-    def _str(self):
-        return f"{self.name}:{self.score}"           
-
 
