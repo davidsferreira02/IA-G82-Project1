@@ -42,6 +42,8 @@ class Arena:
         # Set the font
         self.font = pygame.font.SysFont(None, 30)
 
+       
+
         # Create initial blocks
         self.black_blocks = []
         for i in range(random.randint(1, 30)):
@@ -66,6 +68,8 @@ class Arena:
         self.astar=Astar() 
 
         self.gameOver=GameOver(self.screen,self.player,self.size)
+
+      
               
 
     def run(self):

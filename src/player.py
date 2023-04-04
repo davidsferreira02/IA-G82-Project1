@@ -6,7 +6,7 @@ class Player:
         self.score=0
         self.x=0
         self.y=0
-        self.level=0
+        self.level=1
         self.cost=0
         self.state='UP'
         self.size = size
