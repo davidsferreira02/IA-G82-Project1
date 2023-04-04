@@ -5,7 +5,7 @@ import sys
 from player import Player
 from astar import Astar
 from gameOver import GameOver
-from bfs import BFS
+from bfs import get_path
 
 
 
@@ -73,10 +73,6 @@ class Arena:
               
 
     def run(self):
-        res=[]
-        res = res = self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS, self.black_blocks)
-
-        res1=len(res)
        
         # Define the game loop
         while True:
@@ -178,10 +174,9 @@ class Arena:
 
                   
 
-                    
-                start_node = (self.player.x,self.player.y)
-                goal_node = (self.golden_block_X, self.golden_block_Y)
-                path = BFS(start_node, goal_node,neighbors)
+             
+        
+                path = get_path((self.player.x, self.player.y), (self.golden_block_X,self.golden_block_Y), self.black_blocks, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS)
 
                     
                                                            
@@ -204,8 +199,8 @@ class Arena:
                             self.golden_block = (random.randint(0, self.ARENA_WIDTH_BLOCKS-1), random.randint(0, self.ARENA_HEIGHT_BLOCKS-1))
                         self.golden_block_X = self.golden_block[0]
                         self.golden_block_Y = self.golden_block[1]
-                        res = res = self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS, self.black_blocks)
-                        res1=len(res)  
+                        #res = res = self.astar.find_path((self.player.x, self.player.y), self.golden_block, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS, self.black_blocks)
+                        #res1=len(res)  
 
             # Draw the background
             self.screen.fill(self.BLUE)
