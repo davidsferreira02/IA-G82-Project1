@@ -89,7 +89,7 @@ def draw_score(player_score,white,screen,player_cost,player_level,font,clock):
 
 # Update the display
     pygame.display.update()
-    pygame.time.delay(520)
+    pygame.time.delay(1000)
     # Set the frame rate
     #clock.tick(10)
 
@@ -134,9 +134,7 @@ class Arena:
         self.golden_block_X = self.golden_block[0]
         self.golden_block_Y = self.golden_block[1]
 
-
         self.score_level = 0   
-
   
     def run(self):
         # Define the game loop
@@ -236,9 +234,25 @@ class Arena:
                         #print(self.player.score)
                     else:
                         path = get_path((self.player.x, self.player.y), self.golden_block, self.black_blocks, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS)
-                        for new_coordinates in path:
+                        for i,new_coordinates in enumerate(path):
+                            print(i,new_coordinates)
+                            prev_x = self.player.x
+                            prev_y = self.player.y
                             self.player.x = new_coordinates[0]
                             self.player.y = new_coordinates[1]
+                            if i % 2 == 0:
+                                self.player.state = 'UP'  # standing state
+                            else:
+                                if prev_x < self.player.x:
+                                    self.player.state = 'DS'  # rolling state to the right
+                                    self.player.x+1
+                                elif prev_x > self.player.x:
+                                    self.player.state = 'DS'  # rolling state to the left
+                                elif prev_y < self.player.y:
+                                    self.player.state = 'DF'  # rolling state upwards
+                                    self.player.x+1
+                                else:
+                                    self.player.state = 'DF'  # rolling state downwards
                             draw_background(self.screen,self.black_blocks,self.golden_block,self.BLOCK_SIZE,self.SCREEN_WIDTH,self.SCREEN_HEIGHT,self.ARENA_WIDTH_BLOCKS,self.ARENA_HEIGHT_BLOCKS,self.BLACK,self.GRAY,self.GOLD)
                             draw_player(self.player.x,self.player.state,self.player.y,self.BLOCK_SIZE,self.RED,self.screen)
                             draw_score(self.player.score,self.WHITE,self.screen,self.player.cost,self.player.level,self.font,self.clock)
