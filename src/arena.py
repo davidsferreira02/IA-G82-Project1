@@ -197,9 +197,31 @@ class Arena:
                 draw_score(self.player.score,self.WHITE,self.screen,self.player.cost,self.player.level,self.font,self.clock)
 
             elif (self.game_mode == 1): #bfs
-                path = get_path((self.player.x, self.player.y), self.golden_block, self.black_blocks, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
 
-            
+                    #print(self.player.x)
+                    passed_level = next_level(self.player.x,self.player.y,self.player.state, self.golden_block_X, self.golden_block_Y)
+
+                    if passed_level:
+                        self.player.update_level()
+                        #print(self.player.score)
+                    else:
+                        #path = get_path((self.player.x, self.player.y), self.golden_block, self.black_blocks, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS)
+                        for new_coordinates in path:
+                            self.player.x = new_coordinates[0]
+                            self.player.y = new_coordinates[1]
+                            draw_background(self.screen,self.black_blocks,self.golden_block,self.BLOCK_SIZE,self.SCREEN_WIDTH,self.SCREEN_HEIGHT,self.ARENA_WIDTH_BLOCKS,self.ARENA_HEIGHT_BLOCKS,self.BLACK,self.GRAY,self.GOLD)
+                            draw_player(self.player.x,self.player.state,self.player.y,self.BLOCK_SIZE,self.RED,self.screen)
+                            draw_score(self.player.score,self.WHITE,self.screen,self.player.cost,self.player.level,self.font,self.clock)
+
+
+                    self.golden_block,self.black_blocks = update_level_and_blocks(self.player.x, self.player.y, self.ARENA_WIDTH_BLOCKS,self.ARENA_HEIGHT_BLOCKS)
+                    self.golden_block_X = self.golden_block[0]
+                    self.golden_block_Y = self.golden_block[1]
+
             elif (self.game_mode == 2):
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:

@@ -1,34 +1,47 @@
 import heapq
+
 """
-class Node:
-    def __init__(self, x, y, cost):
-        self.x = x
-        self.y = y
-        self.g = float('inf')
-        self.cost = cost
+1.  Initialize the open list
+2.  Initialize the closed list
+    put the starting node on the open 
+    list (you can leave its f at zero)
 
-    def distance_to(self, other):
-        return abs(self.x - other.x) + abs(self.y - other.y)
-     #dist entre nos heuristica
+3.  while the open list is not empty
+    a) find the node with the least f on 
+       the open list, call it "q"
 
-    def get_man_heuristic(self,goal_node):
-        return abs(self.x - goal_node.x) + abs(self.y - goal_node.y)
-    
-    def get_cost(self,other):
-        #custo de mov entre 2 nós
-        distance = self.distance_to(other)
-        return distance*self.cost #pode haver cenarios com custo > 1 para certos nos ent multiplicas se pela distancia
+    b) pop q off the open list
+  
+    c) generate q's 8 successors and set their 
+       parents to q
+   
+    d) for each successor
+        i) if successor is the goal, stop search
+        
+        ii) else, compute both g and h for successor
+          successor.g = q.g + distance between 
+                              successor and q
+          successor.h = distance from goal to 
+          successor (This can be done using many 
+          ways, we will discuss three heuristics- 
+          Manhattan, Diagonal and Euclidean 
+          Heuristics)
+          
+          successor.f = successor.g + successor.h
 
-    def f(self,goal_node):
-        return self.g + self.get_man_heuristic(goal_node)
+        iii) if a node with the same position as 
+            successor is in the OPEN list which has a 
+           lower f than successor, skip this successor
 
-    #f = g + h + cost", onde g é o custo do caminho até o nó atual, h é a heurística (que já existia na classe) e cost é o novo parâmetro adicionado.
-    def __lt__(self, other):
-        f1 = self.g + self.get_man_heuristic(self.goal_node) 
-        f2 = other.g + other.get_man_heuristic(other.goal_node) 
-        return f1 < f2
-"""
-    
+        iV) if a node with the same position as 
+            successor  is in the CLOSED list which has
+            a lower f than successor, skip this successor
+            otherwise, add  the node to the open list
+     end (for loop)
+  
+    e) push q on the closed list
+    end (while loop)
+"""  
 class AstarNode:
     def __init__(self, pos: tuple, direction: int, f: int = 0, parent = None):
         
@@ -205,45 +218,3 @@ def get_path(start, goal, obstacles, width, height):
 
     return path
 
-"""
-1.  Initialize the open list
-2.  Initialize the closed list
-    put the starting node on the open 
-    list (you can leave its f at zero)
-
-3.  while the open list is not empty
-    a) find the node with the least f on 
-       the open list, call it "q"
-
-    b) pop q off the open list
-  
-    c) generate q's 8 successors and set their 
-       parents to q
-   
-    d) for each successor
-        i) if successor is the goal, stop search
-        
-        ii) else, compute both g and h for successor
-          successor.g = q.g + distance between 
-                              successor and q
-          successor.h = distance from goal to 
-          successor (This can be done using many 
-          ways, we will discuss three heuristics- 
-          Manhattan, Diagonal and Euclidean 
-          Heuristics)
-          
-          successor.f = successor.g + successor.h
-
-        iii) if a node with the same position as 
-            successor is in the OPEN list which has a 
-           lower f than successor, skip this successor
-
-        iV) if a node with the same position as 
-            successor  is in the CLOSED list which has
-            a lower f than successor, skip this successor
-            otherwise, add  the node to the open list
-     end (for loop)
-  
-    e) push q on the closed list
-    end (while loop)
-"""
