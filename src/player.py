@@ -83,7 +83,7 @@ class Player:
 
     def update_level(self):
         self.level+=1
-        self.reset_cost()
+        self.cost = 0
 
     
 
