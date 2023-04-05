@@ -6,6 +6,9 @@
 | Mariana Lima Teixeira      | up201905705          |
 | David dos Santos Ferreira  | up202006302          |
 
+Commands to install pygame
+sudo apt install python3-pip
+sudo pip install pygame
 
 To start the game you need 
  1. Run menu.py with $ python menu.py

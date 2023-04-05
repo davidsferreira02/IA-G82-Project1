@@ -3,6 +3,7 @@ import pygame
 import sys
 from player import Player
 from astar import get_path
+from bfs import get_path_bfs
 
 def next_level(player_x,player_y,player_state, golden_block_X, golden_block_Y):
     print("player_x",player_x)
@@ -210,10 +211,11 @@ class Arena:
                         self.player.update_level()
                         #print(self.player.score)
                     else:
-                        #path = get_path((self.player.x, self.player.y), self.golden_block, self.black_blocks, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS)
+                        path = get_path_bfs((self.player.x, self.player.y), self.golden_block, self.black_blocks, self.ARENA_WIDTH_BLOCKS, self.ARENA_HEIGHT_BLOCKS)
                         for new_coordinates in path:
                             self.player.x = new_coordinates[0]
                             self.player.y = new_coordinates[1]
+                            
                             draw_background(self.screen,self.black_blocks,self.golden_block,self.BLOCK_SIZE,self.SCREEN_WIDTH,self.SCREEN_HEIGHT,self.ARENA_WIDTH_BLOCKS,self.ARENA_HEIGHT_BLOCKS,self.BLACK,self.GRAY,self.GOLD)
                             draw_player(self.player.x,self.player.state,self.player.y,self.BLOCK_SIZE,self.RED,self.screen)
                             draw_score(self.player.score,self.WHITE,self.screen,self.player.cost,self.player.level,self.font,self.clock)
